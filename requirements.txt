@@ -4,3 +4,4 @@ streamlit-option-menu
 scikit-learn
 protobuf
 keras
+tensorflow
