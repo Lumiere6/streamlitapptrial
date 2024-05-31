@@ -14,11 +14,11 @@ from streamlit_option_menu import option_menu
 
 # loading the saved models
 
-audio_phish_model = pickle.load(open('audiophish.sav', 'rb'))
+audio_phish_model = pickle.load(open('audiophish.pkl', 'rb'))
 
-spoof_model = pickle.load(open('audiospoof.sav', 'rb'))
+#spoof_model = pickle.load(open('audiospoof.sav', 'rb'))
 
-email_model = pickle.load(open('email.sav', 'rb'))
+#email_model = pickle.load(open('email.sav', 'rb'))
 
 # sidebar for navigation
 with st.sidebar:
@@ -52,11 +52,11 @@ if (selected == 'Audio Phishing'):
     # creating a button for Prediction
 
     if st.button('Diabetes Test Result'):
-        diab_prediction = audio_phish_model.predict(Transcripts)
+        prediction = audio_phish_model.predict(Transcripts)
 
-        if (diab_prediction[0] == 1):
-          audio_phish_detection = 'The person is diabetic'
+        if (prediction[0] >= 0.5):
+            phish_detection = 'phish'
         else:
-          audio_phish_detection = 'The person is not diabetic'
+            phish_detection = 'leg'
 
     st.success(audio_phish_detection)
