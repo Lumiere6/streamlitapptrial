@@ -57,6 +57,6 @@ if (selected == 'Audio Phishing'):
         if (prediction[0] >= 0.5):
             phish_detection = 'phish'
         else:
-            phish_detection = 'leg'
+            phish_detection = 'legitimate'
 
     st.success(audio_phish_detection)
