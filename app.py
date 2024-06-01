@@ -61,7 +61,4 @@ X = pad_sequences(sequences,padding='post',maxlen=100)
 if st.button('Result'):
     prediction = audio_phish_model.predict(X)
 
-    if (prediction[0] >= 0.5):
-        phish_detection = 'phish'
-    else:
-        phish_detection = 'legitimate'
+st.echo(prediction)
