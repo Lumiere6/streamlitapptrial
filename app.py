@@ -51,7 +51,7 @@ with open('vishing_tokenizer.json', 'r') as f:
     data = json.load(f)
 
 tokenizer = Tokenizer()
-tokenizer.from_json(data)
+tokenizer.tokenizer_from_json(data)
 
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 sequences = tokenizer.texts_to_sequences(Transcripts)
