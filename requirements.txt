@@ -1,8 +1,8 @@
-pickle-mixin
 streamlit
 streamlit-option-menu
 scikit-learn
-protobuf
-keras
-tensorflow
-nltk
+keras==2.15.0
+tensorflow==2.15.0
+nltk==3.8.1
+pandas== 2.0.3
+lime==0.2.0.1
