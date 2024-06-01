@@ -18,7 +18,7 @@ with st.sidebar:
                           ['Audio Phishing',
                            'Audio Spoofing',
                            'Email Phishing'],
-                          icons=['music','music','mail'],
+                          icons=['music', 'music','mail'],
                           default_index=0)
 
 
@@ -26,12 +26,22 @@ with st.sidebar:
 if (selected == 'Audio Phishing'):
     # page title
     st.title('Audio Phishing detection')
-    # getting the input data from the user
-    col1 = st.columns(1)
-    with col1:
-        Transcripts = st.text_input('Call Transcript')
+    Transcripts = st.text_input('Call Transcript')
 
-
+    # code for Prediction
+def clean_text(text):
+  
+  stop_words = set(stopwords.words('english'))
+  text = text.lower()
+  text = ''.join([w for w in text if not w.isdigit()])
+  tokens = word_tokenize(text)
+  tokens = [token for token in tokens if token not in stop_words]
+  tokens = [token for token in tokens if token not in string.punctuation]
+  lemmatizer = WordNetLemmatizer()
+  tokens = [lemmatizer.lemmatize(token) for token in tokens]
+  text = ' '.join(tokens)
+  return text
+Transcripts=clean_text(str(Transcripts))
 
 if st.button('Diabetes Test Result'):
     prediction = audio_phish_model.predict(Transcripts)
@@ -40,5 +50,6 @@ if st.button('Diabetes Test Result'):
         phish_detection = 'phish'
     else:
         phish_detection = 'legitimate'
-
+with st.echo():
+    st.write(phish_detection)
     st.success(audio_phish_detection)
