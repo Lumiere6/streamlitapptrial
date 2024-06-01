@@ -7,7 +7,7 @@ import nltk
 
 # loading the saved models
 def load_model():
-  with open('audiophish.pkl',rb) as file:
+  with open('audiophish.pkl','rb') as file:
     data = pickle.load(file)
   return data
                        
