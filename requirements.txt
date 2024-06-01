@@ -6,44 +6,4 @@ tensorflow==2.15.0
 nltk==3.8.1
 pandas== 2.0.3
 lime==0.2.0.1
-    nltk
-
-PACKAGE CONTENTS
-    align
-    app (package)
-    book
-    ccg (package)
-    chat (package)
-    chunk (package)
-    classify (package)
-    cluster (package)
-    collocations
-    corpus (package)
-    data
-    decorators
-    downloader
-    draw (package)
-    examples (package)
-    featstruct
-    grammar
-    help
-    inference (package)
-    internals
-    lazyimport
-    metrics (package)
-    misc (package)
-    model (package)
-    parse (package)
-    probability
-    sem (package)
-    sourcedstring
-    stem (package)
-    tag (package)
-    test (package)
-    text
-    tokenize (package)
-    toolbox
-    tree
-    treetransforms
-    util
-    yamltags
+nltk==3.5
