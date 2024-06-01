@@ -9,6 +9,7 @@ nltk.download('punkt')
 from keras.models import load_model
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
+from nltk.tokenize import word_tokenize
                        
 audio_phish_model =load_model('audio_phish_model.h5')
 
