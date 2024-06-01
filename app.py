@@ -6,6 +6,7 @@ from streamlit_option_menu import option_menu
 import nltk
 nltk.download('stopwords')
 nltk.download('punkt')
+nltk.download('wordnet')
 from keras.models import load_model
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
