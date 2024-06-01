@@ -4,14 +4,9 @@ import pickle
 import streamlit as st
 from streamlit_option_menu import option_menu
 import nltk
-
-# loading the saved models
-def load_model():
-  with open('audiophish.pkl','rb') as file:
-    data = pickle.load(file)
-  return data
+from keras.models import load_model
                        
-audio_phish_model =load_model()
+audio_phish_model =load_model('audio_phish_model.h5')
 
 #spoof_model = pickle.load(open('audiospoof.sav', 'rb'))
 
