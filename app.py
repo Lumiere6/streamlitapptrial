@@ -42,7 +42,7 @@ def clean_text(text):
   return text
 Transcripts=clean_text(str(Transcripts))
 
-if st.button( Result'):
+if st.button('Result'):
     prediction = audio_phish_model.predict(Transcripts)
 
     if (prediction[0] >= 0.5):
