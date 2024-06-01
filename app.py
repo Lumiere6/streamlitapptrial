@@ -6,8 +6,12 @@ from streamlit_option_menu import option_menu
 import nltk
 
 # loading the saved models
-
-audio_phish_model = pickle.load(open('audiophish.sav', 'rb'))
+def load_model():
+  with open('audiophish.pkl',rb) as file:
+    data = pickle.load(file
+  return data
+                       
+audio_phish_model =load_model()
 
 #spoof_model = pickle.load(open('audiospoof.sav', 'rb'))
 
