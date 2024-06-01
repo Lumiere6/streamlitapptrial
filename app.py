@@ -42,7 +42,7 @@ def clean_text(text):
   tokens = [lemmatizer.lemmatize(token) for token in tokens]
   text = ' '.join(tokens)
   return text
-Transcripts=clean_text(Transcripts)
+Transcripts=clean_text(str(Transcripts))
 
 
 if st.button('Diabetes Test Result'):
