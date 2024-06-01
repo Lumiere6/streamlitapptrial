@@ -43,11 +43,25 @@ def clean_text(text):
   return text
 Transcripts=clean_text(str(Transcripts))
 
+
+import json
+from tensorflow.keras.preprocessing.text import Tokenizer
+
+with open('vishing_tokenizer.json', 'r') as f:
+    data = json.load(f)
+
+tokenizer = Tokenizer()
+tokenizer.from_json(data)
+
+from tensorflow.keras.preprocessing.sequence import pad_sequences
+sequences = tokenizer.texts_to_sequences(Transcripts)
+X = pad_sequences(sequences,padding='post',maxlen=100)
+
+
 if st.button('Result'):
-    prediction = audio_phish_model.predict(Transcripts)
+    prediction = audio_phish_model.predict(X)
 
     if (prediction[0] >= 0.5):
         phish_detection = 'phish'
     else:
         phish_detection = 'legitimate'
-    st.success(audio_phish_detection)
