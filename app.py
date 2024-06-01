@@ -12,12 +12,6 @@ from nltk.stem import WordNetLemmatizer
 from nltk.tokenize import word_tokenize
                        
 audio_phish_model =load_model('audio_phish_model.h5')
-
-#spoof_model = pickle.load(open('audiospoof.sav', 'rb'))
-
-#email_model = pickle.load(open('email.sav', 'rb'))
-
-# sidebar for navigation
 with st.sidebar:
     selected = option_menu('Phishing detection system',
                           ['Audio Phishing',
@@ -48,13 +42,11 @@ def clean_text(text):
   return text
 Transcripts=clean_text(str(Transcripts))
 
-if st.button('Diabetes Test Result'):
+if st.button( Result'):
     prediction = audio_phish_model.predict(Transcripts)
 
     if (prediction[0] >= 0.5):
         phish_detection = 'phish'
     else:
         phish_detection = 'legitimate'
-with st.echo():
-    st.write(phish_detection)
     st.success(audio_phish_detection)
