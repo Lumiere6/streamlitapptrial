@@ -46,12 +46,12 @@ def clean_text(text):
 Transcripts=clean_text(Transcripts)
 
 
-    if st.button('Diabetes Test Result'):
-        prediction = audio_phish_model.predict(Transcripts)
+if st.button('Diabetes Test Result'):
+    prediction = audio_phish_model.predict(Transcripts)
 
-        if (prediction[0] >= 0.5):
-            phish_detection = 'phish'
-        else:
-            phish_detection = 'legitimate'
+    if (prediction[0] >= 0.5):
+        phish_detection = 'phish'
+    else:
+        phish_detection = 'legitimate'
 
     st.success(audio_phish_detection)
