@@ -5,6 +5,8 @@ import streamlit as st
 from streamlit_option_menu import option_menu
 import nltk
 from keras.models import load_model
+from nltk.corpus import stopwords
+from nltk.stem import WordNetLemmatizer
                        
 audio_phish_model =load_model('audio_phish_model.h5')
 
