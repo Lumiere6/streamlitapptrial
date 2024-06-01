@@ -30,19 +30,7 @@ if (selected == 'Audio Phishing'):
     col1 = st.columns(1)
     with col1:
         Transcripts = st.text_input('Call Transcript')
-    # code for Prediction
-def clean_text(text):
-  stop_words = set(stopwords.words('english'))
-  text = text.lower()
-  text = ''.join([w for w in text if not w.isdigit()])
-  tokens = word_tokenize(text)
-  tokens = [token for token in tokens if token not in stop_words]
-  tokens = [token for token in tokens if token not in string.punctuation]
-  lemmatizer = WordNetLemmatizer()
-  tokens = [lemmatizer.lemmatize(token) for token in tokens]
-  text = ' '.join(tokens)
-  return text
-Transcripts=clean_text(str(Transcripts))
+
 
 
 if st.button('Diabetes Test Result'):
