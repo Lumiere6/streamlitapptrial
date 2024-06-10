@@ -42,48 +42,12 @@ def clean_text(text):
   text = ' '.join(tokens)
   return text
 Transcripts=clean_text(str(Transcripts))
-def tokenizer_from_json(json_string):
-    """Parses a JSON tokenizer configuration file and returns a
-    tokenizer instance.
-
-    # Arguments
-        json_string: JSON string encoding a tokenizer configuration.
-
-    # Returns
-        A Keras Tokenizer instance
-    """
-    tokenizer_config = json.loads(json_string)
-    config = tokenizer_config.get('config')
-
-    word_counts = json.loads(config.pop('word_counts'))
-    word_docs = json.loads(config.pop('word_docs'))
-    index_docs = json.loads(config.pop('index_docs'))
-    # Integer indexing gets converted to strings with json.dumps()
-    index_docs = {int(k): v for k, v in index_docs.items()}
-    index_word = json.loads(config.pop('index_word'))
-    index_word = {int(k): v for k, v in index_word.items()}
-    word_index = json.loads(config.pop('word_index'))
-
-    tokenizer = Tokenizer(**config)
-    tokenizer.word_counts = word_counts
-    tokenizer.word_docs = word_docs
-    tokenizer.index_docs = index_docs
-    tokenizer.word_index = word_index
-    tokenizer.index_word = index_word
-
-    return tokenizer
-
 import json
 from tensorflow.keras.preprocessing.text import Tokenizer
 
-with open('vishing_tokenizer.json', 'r') as f:
-    data = json.load(f)
-
-tokenizer = Tokenizer.tokenizer_from_json(data)
-
 
 from tensorflow.keras.preprocessing.sequence import pad_sequences
-sequences = tokenizer.texts_to_sequences(Transcripts)
+sequences = Tokenizer.texts_to_sequences(Transcripts)
 X = pad_sequences(sequences,padding='post',maxlen=100)
 
 
