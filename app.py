@@ -16,6 +16,9 @@ import tensorflow as tf
 from tensorflow.keras.preprocessing.text import Tokenizer
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 
+st.set_page_config(page_title="Health Assistant",
+                   layout="wide",
+                   page_icon="🧑‍⚕️")
 # model
 audio_phish_model = pickle.load(open('audiophish.sav', 'rb'))
 
