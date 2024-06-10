@@ -16,6 +16,9 @@ import tensorflow as tf
 import numpy as np
 from tensorflow.keras.preprocessing.text import Tokenizer
 from tensorflow.keras.preprocessing.sequence import pad_sequences
+import lime
+import lime.lime_text
+from lime.lime_text import LimeTextExplainer
 
 st.set_page_config(page_title="Phishing detection Framework",
                    layout="wide",
@@ -76,7 +79,23 @@ if (selected == 'Audio Phishing'):
     tokens=tf.keras.preprocessing.text.tokenizer_from_json(json_string)
     tokenized_transcripts=tokens.texts_to_sequences(cleaned_transcripts)
     X = pad_sequences(tokenized_transcripts,maxlen=100,padding='post')
-    prediction=audio_phish_model.predict(X)
+    pred=audio_phish_model.predict(X)
+
+  
+class_names=[0,1]
+explainer= LimeTextExplainer(class_names=class_names)
+
+def predict_proba(text):
+  sequence=tokens.texts_to_sequences(text)
+  sequence=pad_sequences(sequence,maxlen=100padding='post')
+  prediction=audio_phish_model.predict(X)
+  returnable=[]
+  for i in prediction:
+    temp=i[0]
+    returnable.append(np.array([1-temp,temp]))
+  return np.array(returnable)
+
+explainer.explain_instance(Transcripts,predict_proba)
 
 if (selected == 'Email Phishing'):
     st.title('Email Phishing')
