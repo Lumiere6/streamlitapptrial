@@ -63,7 +63,7 @@ if (selected == 'Audio Phishing'):
     Transcripts = st.text_input('Call Transcript')
     cleaned_transcripts=clean_text_vishing(Transcripts)
 
-    with open("vishing_tokenizer", "r") as json_file:
+    with open("vishing_tokenizer.json", "r") as json_file:
       json_string = json_file.read()
     
     tokens=tf.keras.preprocessing.text.tokenizer_from_json(json_string)
