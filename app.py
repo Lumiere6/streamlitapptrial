@@ -75,11 +75,12 @@ with open("vishing_tokenizer.json", "r") as json_file:
 tokens=tf.keras.preprocessing.text.tokenizer_from_json(json_string)
 tokenized_transcripts=tokens.texts_to_sequences(cleaned_transcripts)
 X = pad_sequences(tokenized_transcripts,maxlen=200,padding='post')
+pred=audio_phish_model.predict(X)
     
 
 
 
-if (selected == 'Email Phishing'):
+'''if (selected == 'Email Phishing'):
     st.title('Email Phishing')
     email = st.text_input('Email')
 if (selected == 'Website phishing'):
@@ -90,6 +91,6 @@ if (selected == 'Smishing'):
     sms = st.text_input('SMS')
 
 if st.button('Result'):
-prediction = audio_phish_model.predict(X)
+  prediction = audio_phish_model.predict(X)
 
-st.echo(prediction)
+st.echo(prediction)'''
