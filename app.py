@@ -18,7 +18,7 @@ from tensorflow.keras.preprocessing.sequence import pad_sequences
 
 st.set_page_config(page_title="Phishing detection Framework",
                    layout="wide",
-                   page_icon="🧑‍🔬")
+                   page_icon="🕵️‍♀️")
 # model
 audio_phish_model = pickle.load(open('audiophish.sav', 'rb'))
 
@@ -62,7 +62,7 @@ with st.sidebar:
                            'Email Phishing',
                            'Website phishing',
                            'Smishing'],
-                          icons=['music', 'music','mail'],
+                          icons=['📲','🔉','📧','','✉️'],
                           default_index=0)
 
 if (selected == 'Audio Phishing'):
@@ -76,4 +76,9 @@ tokens=tf.keras.preprocessing.text.tokenizer_from_json(json_string)
 tokenized_transcripts=tokens.texts_to_sequences(cleaned_transcripts)
 X = pad_sequences(tokenized_transcripts,maxlen=100,padding='post')
 pred=audio_phish_model.predict(X)
-st.echo(pred)   
+returnable=[]
+  for i in prediction:
+    temp=i[0]
+    returnable.append(np.array([1-temp,temp]))
+pre=np.array(returnable)
+st.echo(pre)   
