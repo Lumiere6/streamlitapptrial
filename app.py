@@ -18,6 +18,7 @@ from tensorflow.keras.preprocessing.sequence import pad_sequences
 
 # model
 audio_phish_model = pickle.load(open('audiophish.sav', 'rb'))
+
 #preprocessing functions
 
 def clean_text_vishing(text):
@@ -87,8 +88,7 @@ if (selected == 'Smishing'):
     st.title('Smishing')
     sms = st.text_input('SMS')
 
-
 if st.button('Result'):
-    prediction = audio_phish_model.predict(X)
+prediction = audio_phish_model.predict(X)
 
 st.echo(prediction)
