@@ -63,7 +63,7 @@ with st.sidebar:
                            'Email Phishing',
                            'Website phishing',
                            'Smishing'],
-                          icons=['📲','🔉','📧','','✉️'],
+                          icons=['loud_sound','🔉','📧','','✉️'],
                           default_index=0)
 
 if (selected == 'Audio Phishing'):
