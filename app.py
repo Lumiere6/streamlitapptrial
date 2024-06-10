@@ -68,15 +68,13 @@ with st.sidebar:
 if (selected == 'Audio Phishing'):
     st.title('Audio Phishing detection')
     Transcripts = st.text_input('Call Transcript')
-    cleaned_transcripts=clean_text_vishing(Transcripts)
 
-    with open("vishing_tokenizer.json", "r") as json_file:
-      json_string = json_file.read()
-    
-    tokens=tf.keras.preprocessing.text.tokenizer_from_json(json_string)
-
-    tokenized_transcripts=tokens.texts_to_sequences([cleaned_transcripts])
-    X = pad_sequences(tokenized_transcripts,maxlen=5296,padding='post')
+cleaned_transcripts=clean_text_vishing(Transcripts)
+with open("vishing_tokenizer.json", "r") as json_file:
+    json_string = json_file.read()
+tokens=tf.keras.preprocessing.text.tokenizer_from_json(json_string)
+tokenized_transcripts=tokens.texts_to_sequences([cleaned_transcripts])
+X = pad_sequences(tokenized_transcripts,maxlen=5296,padding='post')
     
 
 
