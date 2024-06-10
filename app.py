@@ -70,7 +70,7 @@ if (selected == 'Audio Phishing'):
 
     tokenized_transcripts=tokens.texts_to_sequences([cleaned_transcripts])
     X = pad_sequences(tokenized_transcripts,maxlen=5296,padding='post')
-
+    st.echo(X)
 
 
 
@@ -86,7 +86,7 @@ if (selected == 'Smishing'):
     sms = st.text_input('SMS')
 
 
-if st.button('Result'):
+'''if st.button('Result'):
     prediction = audio_phish_model.predict(X)
 
 st.echo(prediction)
