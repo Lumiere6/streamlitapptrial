@@ -11,26 +11,13 @@ from keras.models import load_model
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 from nltk.tokenize import word_tokenize
-                       
-audio_phish_model =load_model('audio_phish_model.h5')
-with st.sidebar:
-    selected = option_menu('Phishing detection system',
-                          ['Audio Phishing',
-                           'Audio Spoofing',
-                           'Email Phishing'],
-                          icons=['music', 'music','mail'],
-                          default_index=0)
+import json
+import tensorflow as tf
+from tensorflow.keras.preprocessing.text import Tokenizer
+from tensorflow.keras.preprocessing.sequence import pad_sequences
+#preprocessing functions
 
-
-# Diabetes Prediction Page
-if (selected == 'Audio Phishing'):
-    # page title
-    st.title('Audio Phishing detection')
-    Transcripts = st.text_input('Call Transcript')
-
-    # code for Prediction
-def clean_text(text):
-  
+def clean_text_vishing(text):
   stop_words = set(stopwords.words('english'))
   text = text.lower()
   text = ''.join([w for w in text if not w.isdigit()])
@@ -41,14 +28,62 @@ def clean_text(text):
   tokens = [lemmatizer.lemmatize(token) for token in tokens]
   text = ' '.join(tokens)
   return text
-Transcripts=clean_text(str(Transcripts))
-import json
-from tensorflow.keras.preprocessing.text import Tokenizer
+
+def clean_text_email(text):
+  text=str(text)
+  text = text.lower()
+  tokens = word_tokenize(text)
+  tokens = [token for token in tokens if token not in string.punctuation]
+  text = ' '.join(tokens)
+  return text
+
+def clean_text_sms(text):
+  text=str(text)
+  text = text.lower()
+  tokens = word_tokenize(text)
+  stop_words = set(stopwords.words('english'))
+  tokens = [token for token in tokens if token not in stop_words]
+  lemmatizer = WordNetLemmatizer()
+  tokens = [lemmatizer.lemmatize(token) for token in tokens]
+  text = ' '.join(tokens)
+  return text
+
+with st.sidebar:
+    selected = option_menu('Phishing detection system',
+                          ['Audio Phishing',
+                           'Audio Spoofing',
+                           'Email Phishing',
+                           'Website phishing',
+                           'Smishing'],
+                          icons=['music', 'music','mail'],
+                          default_index=0)
+
+if (selected == 'Audio Phishing'):
+    st.title('Audio Phishing detection')
+    Transcripts = st.text_input('Call Transcript')
+    cleaned_transcripts=clean_text_vishing(Transcripts)
+
+    with open("vishing_tokenizer", "r") as json_file:
+      json_string = json_file.read()
+    
+    tokens=tf.keras.preprocessing.text.tokenizer_from_json(json_string)
+
+    tokenized_transcripts=tokens.texts_to_sequences([cleaned_transcripts])
+    X = pad_sequences(tokenized_transcripts,maxlen=5296,padding='post')
 
 
-from tensorflow.keras.preprocessing.sequence import pad_sequences
-sequences = Tokenizer.texts_to_sequences(Transcripts)
-X = pad_sequences(sequences,padding='post',maxlen=100)
+
+
+
+if (selected == 'Email Phishing'):
+    st.title('Email Phishing')
+    email = st.text_input('Email')
+if (selected == 'Website phishing'):
+    st.title('Website Phishing')
+    website = st.text_input('URL')
+if (selected == 'Smishing'):
+    st.title('Smishing')
+    sms = st.text_input('SMS')
 
 
 if st.button('Result'):
