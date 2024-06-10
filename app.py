@@ -70,7 +70,6 @@ if (selected == 'Audio Phishing'):
 
     tokenized_transcripts=tokens.texts_to_sequences([cleaned_transcripts])
     X = pad_sequences(tokenized_transcripts,maxlen=5296,padding='post')
-    st.echo(X)
 
 
 
