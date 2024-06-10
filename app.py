@@ -86,7 +86,7 @@ if (selected == 'Smishing'):
     sms = st.text_input('SMS')
 
 
-'''if st.button('Result'):
+if st.button('Result'):
     prediction = audio_phish_model.predict(X)
 
 st.echo(prediction)
