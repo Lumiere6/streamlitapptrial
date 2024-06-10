@@ -17,7 +17,7 @@ from tensorflow.keras.preprocessing.text import Tokenizer
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 
 # model
-audio_phish_model = pickle.load(open('main/audiophish.sav', 'rb'))
+audio_phish_model = pickle.load(open('audiophish.sav', 'rb'))
 #preprocessing functions
 
 def clean_text_vishing(text):
