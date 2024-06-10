@@ -77,8 +77,8 @@ tokenized_transcripts=tokens.texts_to_sequences(cleaned_transcripts)
 X = pad_sequences(tokenized_transcripts,maxlen=100,padding='post')
 pred=audio_phish_model.predict(X)
 returnable=[]
-  for i in prediction:
-    temp=i[0]
-    returnable.append(np.array([1-temp,temp]))
+for i in prediction:
+  temp=i[0]
+  returnable.append(np.array([1-temp,temp]))
 pre=np.array(returnable)
 st.echo(pre)   
