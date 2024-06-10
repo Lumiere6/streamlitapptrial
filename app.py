@@ -76,7 +76,7 @@ tokens=tf.keras.preprocessing.text.tokenizer_from_json(json_string)
 tokenized_transcripts=tokens.texts_to_sequences(cleaned_transcripts)
 X = pad_sequences(tokenized_transcripts,maxlen=100,padding='post')
 pred=audio_phish_model.predict(X)
-    
+st.echo(pred)    
 
 
 
