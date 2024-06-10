@@ -77,9 +77,18 @@ tokens=tf.keras.preprocessing.text.tokenizer_from_json(json_string)
 tokenized_transcripts=tokens.texts_to_sequences(cleaned_transcripts)
 X = pad_sequences(tokenized_transcripts,maxlen=100,padding='post')
 prediction=audio_phish_model.predict(X)
-returnable=[]
-for i in prediction:
-  temp=i[0]
-  returnable.append(np.array([1-temp,temp]))
-pre=np.array(returnable)
-st.echo(pre)   
+
+'''if (selected == 'Email Phishing'):
+    st.title('Email Phishing')
+    email = st.text_input('Email')
+if (selected == 'Website phishing'):
+    st.title('Website Phishing')
+    website = st.text_input('URL')
+if (selected == 'Smishing'):
+    st.title('Smishing')
+    sms = st.text_input('SMS')
+
+if st.button('Result'):
+  prediction = audio_phish_model.predict(X)
+
+st.echo(prediction)''
