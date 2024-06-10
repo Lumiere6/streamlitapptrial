@@ -15,6 +15,9 @@ import json
 import tensorflow as tf
 from tensorflow.keras.preprocessing.text import Tokenizer
 from tensorflow.keras.preprocessing.sequence import pad_sequences
+
+# model
+audio_phish_model = pickle.load(open('main/audiophish.sav', 'rb'))
 #preprocessing functions
 
 def clean_text_vishing(text):
@@ -70,7 +73,7 @@ if (selected == 'Audio Phishing'):
 
     tokenized_transcripts=tokens.texts_to_sequences([cleaned_transcripts])
     X = pad_sequences(tokenized_transcripts,maxlen=5296,padding='post')
-
+    
 
 
 
