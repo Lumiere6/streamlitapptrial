@@ -71,19 +71,22 @@ if (selected == 'Audio Phishing'):
     Transcripts = st.text_input('Call Transcript')
     cleaned_transcripts=clean_text_vishing(Transcripts)
 
-with open("vishing_tokenizer.json", "r") as json_file:
-    json_string = json_file.read()
-tokens=tf.keras.preprocessing.text.tokenizer_from_json(json_string)
-tokenized_transcripts=tokens.texts_to_sequences(cleaned_transcripts)
-X = pad_sequences(tokenized_transcripts,maxlen=100,padding='post')
-prediction=audio_phish_model.predict(X)
+    with open("vishing_tokenizer.json", "r") as json_file:
+      json_string = json_file.read()
+    tokens=tf.keras.preprocessing.text.tokenizer_from_json(json_string)
+    tokenized_transcripts=tokens.texts_to_sequences(cleaned_transcripts)
+    X = pad_sequences(tokenized_transcripts,maxlen=100,padding='post')
+    prediction=audio_phish_model.predict(X)
 
-'''if (selected == 'Email Phishing'):
+if (selected == 'Email Phishing'):
     st.title('Email Phishing')
     email = st.text_input('Email')
+
 if (selected == 'Website phishing'):
     st.title('Website Phishing')
     website = st.text_input('URL')
+
+
 if (selected == 'Smishing'):
     st.title('Smishing')
     sms = st.text_input('SMS')
@@ -91,4 +94,4 @@ if (selected == 'Smishing'):
 if st.button('Result'):
   prediction = audio_phish_model.predict(X)
 
-st.echo(prediction)'''
+st.echo(prediction)
