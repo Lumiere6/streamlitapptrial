@@ -75,7 +75,7 @@ with open("vishing_tokenizer.json", "r") as json_file:
 tokens=tf.keras.preprocessing.text.tokenizer_from_json(json_string)
 tokenized_transcripts=tokens.texts_to_sequences(cleaned_transcripts)
 X = pad_sequences(tokenized_transcripts,maxlen=100,padding='post')
-pred=audio_phish_model.predict(X)
+prediction=audio_phish_model.predict(X)
 returnable=[]
 for i in prediction:
   temp=i[0]
