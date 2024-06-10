@@ -87,7 +87,7 @@ explainer= LimeTextExplainer(class_names=class_names)
 
 def predict_proba(text):
   sequence=tokens.texts_to_sequences(text)
-  sequence=pad_sequences(sequence,maxlen=100padding='post')
+  sequence=pad_sequences(sequence,maxlen=100,padding='post')
   prediction=audio_phish_model.predict(X)
   returnable=[]
   for i in prediction:
