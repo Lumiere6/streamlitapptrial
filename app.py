@@ -85,6 +85,6 @@ if (selected == 'Audio Phishing'):
 
 
 if st.button('Result'):
-  prediction = audio_phish_model.predict(X)
+ 
 
 st.echo(prediction)
