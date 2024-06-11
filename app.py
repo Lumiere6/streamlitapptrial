@@ -80,9 +80,9 @@ if (selected == 'Audio Phishing'):
     pred=audio_phish_model.predict(X)
     class_names=['Legitimate','Phishing']
     prediction= "The text is predicted to be: "+ class_names[np.argmax(np.argmax(pred))]
+    st.echo(prediction)
 
   
 
 
-if st.button('Result'):
-  st.echo(prediction)
+
