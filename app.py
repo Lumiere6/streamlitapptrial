@@ -80,35 +80,10 @@ if (selected == 'Audio Phishing'):
     tokenized_transcripts=tokens.texts_to_sequences(cleaned_transcripts)
     X = pad_sequences(tokenized_transcripts,maxlen=100,padding='post')
     pred=audio_phish_model.predict(X)
+    prediction=mp.argmax(pred)
 
   
-class_names=[0,1]
-explainer= LimeTextExplainer(class_names=class_names)
 
-def predict_proba(text):
-  sequence=tokens.texts_to_sequences(text)
-  sequence=pad_sequences(sequence,maxlen=100,padding='post')
-  prediction=audio_phish_model.predict(X)
-  returnable=[]
-  for i in prediction:
-    temp=i[0]
-    returnable.append(np.array([1-temp,temp]))
-  return np.array(returnable)
-
-explainer.explain_instance(Transcripts,predict_proba)
-
-if (selected == 'Email Phishing'):
-    st.title('Email Phishing')
-    email = st.text_input('Email')
-
-if (selected == 'Website phishing'):
-    st.title('Website Phishing')
-    website = st.text_input('URL')
-
-
-if (selected == 'Smishing'):
-    st.title('Smishing')
-    sms = st.text_input('SMS')
 
 if st.button('Result'):
   prediction = audio_phish_model.predict(X)
