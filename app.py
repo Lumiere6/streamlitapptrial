@@ -21,7 +21,7 @@ import lime.lime_text
 from lime.lime_text import LimeTextExplainer
 st.set_page_config(page_title="Phishing detection Framework",layout="wide",page_icon="🕵️‍♀️")
 # model
-st.cache(allow_output_mutation=True)
+
 audio_phish_model = pickle.load(open('audiophish.sav', 'rb'))
 
 #preprocessing functions
