@@ -20,6 +20,7 @@ import lime
 import lime.lime_text
 from lime.lime_text import LimeTextExplainer
 
+@st.cache(allow_output_mutation=True)
 st.set_page_config(page_title="Phishing detection Framework",
                    layout="wide",
                    page_icon="🕵️‍♀️")
@@ -80,7 +81,8 @@ if (selected == 'Audio Phishing'):
     tokenized_transcripts=tokens.texts_to_sequences(cleaned_transcripts)
     X = pad_sequences(tokenized_transcripts,maxlen=100,padding='post')
     pred=audio_phish_model.predict(X)
-    prediction=mp.argmax(pred)
+    class_names=['Legitimate','Phishing']
+    prediction= class_names[np.argmax(pred)]
 
   
 
