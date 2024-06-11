@@ -79,7 +79,7 @@ if (selected == 'Audio Phishing'):
     X = pad_sequences(tokenized_transcripts,maxlen=100,padding='post')
     pred=audio_phish_model.predict(X)
     class_names=['Legitimate','Phishing']
-    prediction= "The text is predicted to be: "+ class_names[np.argmax(pred)]
+    prediction= "The text is predicted to be: "+ class_names[np.argmax(np.argmax(pred))]
 
   
 
