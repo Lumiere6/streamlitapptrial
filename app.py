@@ -85,6 +85,4 @@ if (selected == 'Audio Phishing'):
 
 
 if st.button('Result'):
- 
-
-st.echo(prediction)
+  st.echo(prediction)
