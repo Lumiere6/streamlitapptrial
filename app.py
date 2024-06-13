@@ -99,10 +99,11 @@ if selected == 'Smishing':
     sms = st.text_input("SMS")
     if st.button("Analyze SMS"):
         cleaned_sms = clean_text_sms(sms)
-        tokenizer_url = 'https://raw.githubusercontent.com/username/repo/main/smishing_tokenizer.json'
-        tokenizer = load_tokenizer_from_url(tokenizer_url)
+        with open("tokenizer_smish.json", "r") as json_file:
+            json_string = json_file.read()
+        tokenizer = tf.keras.preprocessing.text.tokenizer_from_json(json_string)
         tokenized_text = tokenizer.texts_to_sequences([cleaned_sms])
-        X = pad_sequences(tokenized_text, maxlen=100, padding='post')
+        X = pad_sequences(tokenized_text)
         
         pred = smishing_model.predict(X)
         max_pred = np.max(pred)
