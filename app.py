@@ -94,7 +94,7 @@ if selected == 'Audio Phishing':
         else:
             average_prediction = np.mean(pred, axis=0)
         prediction = "The text is predicted to be: " + class_names[np.argmax(average_prediction)]
-      st.success(prediction)
+        st.success(prediction)
 if st.button("Explain Prediction"):
   def predict_proba(text):
     sequence = tokens.texts_to_sequences([text])
