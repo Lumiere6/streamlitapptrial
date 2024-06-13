@@ -66,7 +66,7 @@ with st.sidebar:
                            'Smishing'],
                           icons=['loud_sound','🔉','📧','','✉️'],
                           default_index=0)
-
+class_names=['Legitimate',' Phishing']
 if (selected == 'Audio Phishing'):
     st.title('Audio Phishing detection')
     Transcripts = st.text_input('Call Transcript')
