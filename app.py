@@ -77,9 +77,11 @@ if (selected == 'Audio Phishing'):
     tokens=tf.keras.preprocessing.text.tokenizer_from_json(json_string)
     tokenized_transcripts=tokens.texts_to_sequences(cleaned_transcripts)
     X = pad_sequences(tokenized_transcripts,maxlen=100,padding='post')
-    pred=audio_phish_model.predict_proba(X)
+    pred=audio_phish_model.predict(X)
+    average_prediction = np.mean(pred,axis=0)
+    
     class_names=['Legitimate','Phishing']
-    prediction= "The text is predicted to be: "+ class_names[np.mean(np.argmax(pred))]
+    prediction= "The text is predicted to be: "+ class_names[np.mean(np.argmax(average_prediction))]
     st.echo(prediction)
 
   
