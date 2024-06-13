@@ -98,12 +98,8 @@ if (selected =='Smishing'):
     tokenizer = tokenizer_from_json(tokenizer_json)
     return tokenizer
   tokenizer_url = 'https://github.com/Lumiere6/streamlitapptrial/blob/main/vishing_tokenizer.json'
-
-# Load the tokenizer
-  tokenizer = load_tokenizer_from_url(tokenizer_url)
-  tokenized_transcripts=tokenizer.texts_to_sequences(cleaned_transcripts)
   X = pad_sequences(tokenized_transcripts,maxlen=50,padding='post')
-  pred=audio_phish_model.predict(X)
+  pred=smishing_model.predict(X)
   max=np.max(pred)
   if max>=0.5:
     average_prediction=0.7
