@@ -20,6 +20,7 @@ from tensorflow.keras.preprocessing.sequence import pad_sequences
 import lime
 import lime.lime_text
 from lime.lime_text import LimeTextExplainer
+from keras.preprocessing.text import tokenizer_from_json
 st.set_page_config(page_title="Phishing detection Framework",layout="wide",page_icon="🕵️‍♀️")
 # model
 
