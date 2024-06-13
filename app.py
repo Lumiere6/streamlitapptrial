@@ -91,8 +91,8 @@ if (selected =='Smishing'):
   sms=st.text_input("SMS")
   cleaned_sms=clean_text_sms(sms)
   
-  with open("smishing_tokenizer.json", "r") as json_file:
-      json_string = json_file.read()
+  with open("smishing_tokenizer.json", "r") as json1_file:
+      json_string = json1_file.read()
   tokens=tf.keras.preprocessing.text.tokenizer_from_json(json_string)
   tokenized_transcripts=tokens.texts_to_sequences(cleaned_transcripts)
   X = pad_sequences(tokenized_transcripts,maxlen=50,padding='post')
