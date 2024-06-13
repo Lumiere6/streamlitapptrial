@@ -100,7 +100,7 @@ if st.button("Explain Prediction"):
     with open("vishing_tokenizer.json", "r") as json_file:
             json_string = json_file.read()
     tokens = tf.keras.preprocessing.text.tokenizer_from_json(json_string)
-    sequence = tokens.texts_to_sequences([text])
+    sequence = tokens.texts_to_sequences(text)
     sequence = pad_sequences(sequence, maxlen=100, padding='post')
     prediction = audio_phish_model.predict(sequence)
     returnable = []
