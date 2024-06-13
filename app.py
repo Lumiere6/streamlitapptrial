@@ -4,6 +4,7 @@ import pickle
 import streamlit as st
 from streamlit_option_menu import option_menu
 import nltk
+import requests
 nltk.download('stopwords')
 nltk.download('punkt')
 nltk.download('wordnet')
@@ -90,12 +91,16 @@ if (selected =='Smishing'):
   st.title("Smishing Detection")
   sms=st.text_input("SMS")
   cleaned_sms=clean_text_sms(sms)
-  
-  with open("smishing_tokenizer.json", "r") as json_file:
-      json_string = json_file.read()
-  tokenizer = tf.keras.preprocessing.text.Tokenizer()
-  tokens=tokenizer.from_json(json_string)
-  tokenized_transcripts=tokens.texts_to_sequences(cleaned_transcripts)
+  def load_tokenizer_from_url(url):
+    response = requests.get(url)
+    tokenizer_json = response.text
+    tokenizer = tokenizer_from_json(tokenizer_json)
+    return tokenizer
+  tokenizer_url = 'https://github.com/Lumiere6/streamlitapptrial/blob/main/vishing_tokenizer.json'
+
+# Load the tokenizer
+  tokenizer = load_tokenizer_from_url(tokenizer_url)
+  tokenized_transcripts=tokenizer.texts_to_sequences(cleaned_transcripts)
   X = pad_sequences(tokenized_transcripts,maxlen=50,padding='post')
   pred=audio_phish_model.predict(X)
   max=np.max(pred)
