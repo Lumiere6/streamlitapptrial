@@ -111,10 +111,12 @@ if st.button("Explain Prediction"):
   explainer= LimeTextExplainer(class_names=class_names)
   exp = explainer.explain_instance(clean_text_vishing(transcript),predict_proba)
   st.subheader('LIME Explanation:')
-  for feature, importance in exp.as_list():
-    st.write(f"{feature}: {importance}")
-    # Visualize importance as a bar chart or other appropriate graph
-    st.bar_chart({feature: importance})
+  exp_dict = exp.as_list()
+  features = [x[0] for x in exp_dict]
+  weights = [x[1] for x in exp_dict]
+# Plot bar chart using Streamlit
+  st.subheader('LIME Explanation:')
+  st.bar_chart({features[i]: weights[i] for i in range(len(features))}
     
         
 
