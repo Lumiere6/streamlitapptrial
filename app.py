@@ -114,7 +114,6 @@ if selected == 'Audio Phishing':
       features = [x[0] for x in exp_dict]
       weights = [x[1] for x in exp_dict]
 # Plot bar chart using Streamlit
-      st.subheader('LIME Explanation:')
       st.bar_chart({features[i]: weights[i] for i in range(len(features))})
     
         
@@ -138,6 +137,29 @@ if selected == 'Smishing':
             average_prediction = np.mean(pred, axis=0)
         prediction = "The text is predicted to be: " + class_names[np.argmax(average_prediction)]
         st.success(prediction)
+      
+    if st.button("Explain Prediction"):
+      def predict_proba(text):
+        with open("tokenizer_smish.json", "r") as json_file:
+          json_string = json_file.read()
+        tokens = tf.keras.preprocessing.text.tokenizer_from_json(json_string)
+        sequence = tokens.texts_to_sequences(text)
+        sequence = pad_sequences(sequence, maxlen=40, padding='post')
+        prediction = smishing_phish_model.predict(sequence)
+        returnable = []
+        for i in prediction:
+          temp = i[0]
+          returnable.append(np.array([1-temp, temp]))
+        return np.array(returnable)
+      explainer= LimeTextExplainer(class_names=class_names)
+      exp = explainer.explain_instance(clean_text_sms(sms),predict_proba)
+      st.subheader('LIME Explanation:')
+      exp_dict = exp.as_list()
+      features = [x[0] for x in exp_dict]
+      weights = [x[1] for x in exp_dict]
+# Plot bar chart using Streamlit
+      st.bar_chart({features[i]: weights[i] for i in range(len(features))})
+    
       
 if selected == 'Website phishing':
     st.title("Website Phishing Detection")
