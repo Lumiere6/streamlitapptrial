@@ -98,7 +98,7 @@ if (selected =='Smishing'):
     tokenizer = tokenizer_from_json(tokenizer_json)
     return tokenizer
   tokenizer_url = 'https://github.com/Lumiere6/streamlitapptrial/blob/main/vishing_tokenizer.json'
-  X = pad_sequences(tokenized_transcripts,maxlen=50,padding='post')
+  X = pad_sequences(tokenized_transcripts)
   pred=smishing_model.predict(X)
   max=np.max(pred)
   if max>=0.5:
