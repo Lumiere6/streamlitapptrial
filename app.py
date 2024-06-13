@@ -79,7 +79,7 @@ if (selected == 'Audio Phishing'):
     X = pad_sequences(tokenized_transcripts,maxlen=100,padding='post')
     pred=audio_phish_model.predict(X)
     
-    max=np.mean(pred)
+    max=np.max(pred)
     if max>=0.5:
       average_prediction=0.5
     else:
