@@ -93,17 +93,16 @@ if (selected =='Smishing'):
   
   with open("smishing_tokenizer.json", "r") as json_file:
       json_string = json_file.read()
-    tokens=tf.keras.preprocessing.text.tokenizer_from_json(json_string)
-    tokenized_transcripts=tokens.texts_to_sequences(cleaned_transcripts)
-    X = pad_sequences(tokenized_transcripts,maxlen=50,padding='post')
-    pred=audio_phish_model.predict(X)
-    
-    max=np.max(pred)
-    if max>=0.5:
-      average_prediction=0.7
-    else:
-     average_prediction = np.mean(pred,axis=0)
-    prediction= "The text is predicted to be: "+ class_names[np.argmax(average_prediction)]
+  tokens=tf.keras.preprocessing.text.tokenizer_from_json(json_string)
+  tokenized_transcripts=tokens.texts_to_sequences(cleaned_transcripts)
+  X = pad_sequences(tokenized_transcripts,maxlen=50,padding='post')
+  pred=audio_phish_model.predict(X)
+  max=np.max(pred)
+  if max>=0.5:
+    average_prediction=0.7
+  else:
+    average_prediction = np.mean(pred,axis=0)
+  prediction= "The text is predicted to be: "+ class_names[np.argmax(average_prediction)]
     
 if st.button("results"):
   st.success(prediction)
