@@ -75,7 +75,7 @@ with st.sidebar:
                           icons=['loud_sound','🔉','📧','','✉️'],
                           default_index=0)
 class_names=['Legitimate',' Phishing']
-explainer= LimeTextExplainer(class_names=class_names)
+
 if selected == 'Audio Phishing':
     st.title('Audio Phishing Detection')
     transcript = st.text_input('Call Transcript')
@@ -103,8 +103,9 @@ def predict_proba(text):
         temp = i[0]
         returnable.append(np.array([1-temp, temp]))
     return np.array(returnable)
-
-exp = explainer.explain_instance(cleaned_transcript, predict_proba)
+  
+explainer= LimeTextExplainer(class_names=class_names)
+exp = explainer.explain_instance(clean_text_vishing(transcript),predict_proba)
 st.success(prediction)
 st.subheader('LIME Explanation:')
 for feature in exp.as_list():
