@@ -75,6 +75,7 @@ with st.sidebar:
                           icons=['loud_sound','🔉','📧','','✉️'],
                           default_index=0)
 class_names=['Legitimate',' Phishing']
+explainer= LimeTextExplainer(class_names=class_names)
 if selected == 'Audio Phishing':
     st.title('Audio Phishing Detection')
     transcript = st.text_input('Call Transcript')
