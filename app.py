@@ -83,7 +83,7 @@ if (selected == 'Audio Phishing'):
     class_names=['Legitimate','Phishing']
     prediction= "The text is predicted to be: "+ class_names[np.argmax(average_prediction)]
 if st.button("results"):
-  st.echo(prediction)
+  st.success(prediction)
 
   
 
