@@ -103,7 +103,7 @@ if selected == 'Smishing':
             json_string = json_file.read()
         tokenizer = tf.keras.preprocessing.text.tokenizer_from_json(json_string)
         tokenized_text = tokenizer.texts_to_sequences([cleaned_sms])
-        X = pad_sequences(tokenized_text)
+        X = pad_sequences(tokenized_text,maxlen=40,padding='post')
         
         pred = smishing_model.predict(X)
         max_pred = np.max(pred)
