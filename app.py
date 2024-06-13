@@ -23,7 +23,7 @@ st.set_page_config(page_title="Phishing detection Framework",layout="wide",page_
 # model
 
 audio_phish_model = pickle.load(open('audiophish.sav', 'rb'))
-
+smishing_model = pickle.load(open('smishing_model.pkl', 'rb'))
 #preprocessing functions
 
 def clean_text_vishing(text):
@@ -85,8 +85,11 @@ if (selected == 'Audio Phishing'):
     else:
      average_prediction = np.mean(pred,axis=0)
     prediction= "The text is predicted to be: "+ class_names[np.argmax(average_prediction)]
-#if (selected =='Smishing'):
-  
+if (selected =='Smishing'):
+  st.title("Smishing Detection")
+  sms=st.text_input("SMS")
+  cleaned_sms=clean_text_sms(sms)
+    
 if st.button("results"):
   st.success(prediction)
 
