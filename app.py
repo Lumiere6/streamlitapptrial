@@ -166,7 +166,7 @@ if selected == 'Email Phishing':
             json_string = json_file.read()
         tokenizer = tf.keras.preprocessing.text.tokenizer_from_json(json_string)
         tokenized_text = tokenizer.texts_to_sequences([url])
-        X = pad_sequences(tokenized_text, maxlen=60, padding='post')
+        X = pad_sequences(tokenized_text, maxlen=1323, padding='post')
         pred = email_model.predict(X)
         max_pred = np.max(pred)
         if max_pred >= 0.5:
