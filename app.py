@@ -58,7 +58,12 @@ def clean_text_sms(text):
   tokens = [lemmatizer.lemmatize(token) for token in tokens]
   text = ' '.join(tokens)
   return text
-
+def load_tokenizer_from_url(url):
+    response = requests.get(url)
+    tokenizer_json = response.text
+    tokenizer = tokenizer_from_json(tokenizer_json)
+    return tokenizer
+  
 with st.sidebar:
     selected = option_menu('Phishing detection system',
                           ['Audio Phishing',
@@ -69,51 +74,41 @@ with st.sidebar:
                           icons=['loud_sound','🔉','📧','','✉️'],
                           default_index=0)
 class_names=['Legitimate',' Phishing']
-if (selected == 'Audio Phishing'):
-    st.title('Audio Phishing detection')
-    Transcripts = st.text_input('Call Transcript')
-    cleaned_transcripts=clean_text_vishing(Transcripts)
+if selected == 'Audio Phishing':
+    st.title('Audio Phishing Detection')
+    transcript = st.text_input('Call Transcript')
+    if st.button("Analyze Transcript"):
+        cleaned_transcript = clean_text_vishing(transcript)
+        with open("vishing_tokenizer.json", "r") as json_file:
+            json_string = json_file.read()
+        tokens = tf.keras.preprocessing.text.tokenizer_from_json(json_string)
+        tokenized_transcripts = tokens.texts_to_sequences([cleaned_transcript])
+        X = pad_sequences(tokenized_transcripts, maxlen=100, padding='post')
+        pred = audio_phish_model.predict(X)
+        
+        max_pred = np.max(pred)
+        if max_pred >= 0.5:
+            average_prediction = 0.5
+        else:
+            average_prediction = np.mean(pred, axis=0)
+        prediction = "The text is predicted to be: " + class_names[np.argmax(average_prediction)]
+        st.success(prediction)
 
-    with open("vishing_tokenizer.json", "r") as json_file:
-      json_string = json_file.read()
-    tokens=tf.keras.preprocessing.text.tokenizer_from_json(json_string)
-    tokenized_transcripts=tokens.texts_to_sequences(cleaned_transcripts)
-    X = pad_sequences(tokenized_transcripts,maxlen=100,padding='post')
-    pred=audio_phish_model.predict(X)
-    
-    max=np.max(pred)
-    if max>=0.5:
-      average_prediction=0.5
-    else:
-     average_prediction = np.mean(pred,axis=0)
-    prediction= "The text is predicted to be: "+ class_names[np.argmax(average_prediction)]
-  
-if (selected =='Smishing'):
-  st.title("Smishing Detection")
-  sms=st.text_input("SMS")
-  cleaned_sms=clean_text_sms(sms)
-  def load_tokenizer_from_url(url):
-    response = requests.get(url)
-    tokenizer_json = response.text
-    tokenizer = tokenizer_from_json(tokenizer_json)
-    return tokenizer
-  tokenizer_url = 'https://github.com/Lumiere6/streamlitapptrial/blob/main/vishing_tokenizer.json'
-  
-  tokenizer=load_tokenizer_from_url(tokenizer_url)
-  tokenized_text = tokenizer.texts_to_sequences(cleaned_sms)
-  X = pad_sequences(tokenized_text)
-  pred=smishing_model.predict(X)
-  max=np.max(pred)
-  if max>=0.5:
-    average_prediction=0.7
-  else:
-    average_prediction = np.mean(pred,axis=0)
-  prediction= "The text is predicted to be: "+ class_names[np.argmax(average_prediction)]
-    
-if st.button("results"):
-  st.success(prediction)
-
-  
-
-
-
+if selected == 'Smishing':
+    st.title("Smishing Detection")
+    sms = st.text_input("SMS")
+    if st.button("Analyze SMS"):
+        cleaned_sms = clean_text_sms(sms)
+        tokenizer_url = 'https://raw.githubusercontent.com/username/repo/main/smishing_tokenizer.json'
+        tokenizer = load_tokenizer_from_url(tokenizer_url)
+        tokenized_text = tokenizer.texts_to_sequences([cleaned_sms])
+        X = pad_sequences(tokenized_text, maxlen=100, padding='post')
+        
+        pred = smishing_model.predict(X)
+        max_pred = np.max(pred)
+        if max_pred >= 0.5:
+            average_prediction = 0.7
+        else:
+            average_prediction = np.mean(pred, axis=0)
+        prediction = "The text is predicted to be: " + class_names[np.argmax(average_prediction)]
+        st.success(prediction)
