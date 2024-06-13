@@ -26,6 +26,7 @@ st.set_page_config(page_title="Phishing detection Framework",layout="wide",page_
 audio_phish_model = pickle.load(open('audiophish.sav', 'rb'))
 smishing_model = tf.keras.models.load_model('smishing_finalgood_model.h5')
 website_model = tf.keras.models.load_model('url_final_model.h5')
+email_model=tf.keras.models.load_model('email_model.h5')
 #preprocessing functions
 
 def clean_text_vishing(text):
@@ -149,6 +150,24 @@ if selected == 'Website phishing':
         X = pad_sequences(tokenized_text, maxlen=60, padding='post')
         
         pred = website_model.predict(X)
+        max_pred = np.max(pred)
+        if max_pred >= 0.5:
+            average_prediction = 0.7
+        else:
+            average_prediction = np.mean(pred, axis=0)
+        prediction = "The text is predicted to be: " + class_names[np.argmax(average_prediction)]
+        st.success(prediction)
+  
+if selected == 'Email Phishing':
+    st.title("Email Phishing Detection")
+    url = st.text_input("Email content")
+    if st.button("Analyze Email"):
+        with open("email_tokenizer.json", "r") as json_file:
+            json_string = json_file.read()
+        tokenizer = tf.keras.preprocessing.text.tokenizer_from_json(json_string)
+        tokenized_text = tokenizer.texts_to_sequences([url])
+        X = pad_sequences(tokenized_text, maxlen=60, padding='post')
+        pred = email_model.predict(X)
         max_pred = np.max(pred)
         if max_pred >= 0.5:
             average_prediction = 0.7
