@@ -95,7 +95,7 @@ if selected == 'Audio Phishing':
             average_prediction = np.mean(pred, axis=0)
         prediction = "The text is predicted to be: " + class_names[np.argmax(average_prediction)]
 def predict_proba(text):
-    sequence = tokens.texts_to_sequences(text)
+    sequence = tokens.texts_to_sequences([text])
     sequence = pad_sequences(sequence, maxlen=100, padding='post')
     prediction = model.predict(sequence)
     returnable = []
