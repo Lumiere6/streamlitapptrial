@@ -116,7 +116,7 @@ if st.button("Explain Prediction"):
   weights = [x[1] for x in exp_dict]
 # Plot bar chart using Streamlit
   st.subheader('LIME Explanation:')
-  st.bar_chart({features[i]: weights[i] for i in range(len(features))}
+  st.bar_chart({features[i]: weights[i] for i in range(len(features))})
     
         
 
