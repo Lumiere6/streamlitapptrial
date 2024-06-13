@@ -1,4 +1,6 @@
-# -*- coding: utf-8 -*-
+import string
+import pickle
+import streamlit as st
 from streamlit_option_menu import option_menu
 import nltk
 import requests
@@ -18,44 +20,39 @@ import lime
 import lime.lime_text
 from lime.lime_text import LimeTextExplainer
 from keras.preprocessing.text import tokenizer_from_json
-st.set_page_config(page_title="Phishing detection Framework",layout="wide",page_icon="🕵️‍♀️")
-# model
 
+st.set_page_config(page_title="Phishing detection Framework", layout="wide", page_icon="🕵️‍♀️")
+
+# Load models
 audio_phish_model = pickle.load(open('audiophish.sav', 'rb'))
 smishing_model = tf.keras.models.load_model('smishing_finalgood_model.h5')
 website_model = tf.keras.models.load_model('url_final_model.h5')
-#preprocessing functions
 
+# Preprocessing functions
 def clean_text_vishing(text):
-  stop_words = set(stopwords.words('english'))
-  text = text.lower()
-  text = ''.join([w for w in text if not w.isdigit()])
-  tokens = word_tokenize(text)
-  tokens = [token for token in tokens if token not in stop_words]
-  tokens = [token for token in tokens if token not in string.punctuation]
-  lemmatizer = WordNetLemmatizer()
-  tokens = [lemmatizer.lemmatize(token) for token in tokens]
-  text = ' '.join(tokens)
-  return text
-
-def clean_text_email(text):
-  text=str(text)
-  text = text.lower()
-  tokens = word_tokenize(text)
-  tokens = [token for token in tokens if token not in string.punctuation]
-  text = ' '.join(tokens)
-  return text
+    stop_words = set(stopwords.words('english'))
+    text = text.lower()
+    text = ''.join([w for w in text if not w.isdigit()])
+    tokens = word_tokenize(text)
+    tokens = [token for token in tokens if token not in stop_words]
+    tokens = [token for token in tokens if token not in string.punctuation]
+    lemmatizer = WordNetLemmatizer()
+    tokens = [lemmatizer.lemmatize(token) for token in tokens]
+    text = ' '.join(tokens)
+    return text
 
 def clean_text_sms(text):
-  text=str(text)
-  text = text.lower()
-  tokens = word_tokenize(text)
-  stop_words = set(stopwords.words('english'))
-  tokens = [token for token in tokens if token not in stop_words]
-  lemmatizer = WordNetLemmatizer()
-  tokens = [lemmatizer.lemmatize(token) for token in tokens]
-  text = ' '.join(tokens)
-  return text
+    text = str(text).lower()
+    tokens = word_tokenize(text)
+    stop_words = set(stopwords.words('english'))
+    tokens = [token for token in tokens if token not in stop_words]
+    tokens = [token for token in tokens if token not in string.punctuation]
+    lemmatizer = WordNetLemmatizer()
+    tokens = [lemmatizer.lemmatize(token) for token in tokens]
+    text = ' '.join(tokens)
+    return text
+
+# Function to load tokenizer from URL
 def load_tokenizer_from_url(url):
     response = requests.get(url)
     tokenizer_json = response.text
@@ -64,14 +61,15 @@ def load_tokenizer_from_url(url):
 
 with st.sidebar:
     selected = option_menu('Phishing detection system',
-                          ['Audio Phishing',
-                           'Audio Spoofing',
-                           'Email Phishing',
-                           'Website phishing',
-                           'Smishing'],
-                          icons=['loud_sound','🔉','📧','','✉️'],
-                          default_index=0)
-class_names=['Legitimate',' Phishing']
+                           ['Audio Phishing',
+                            'Audio Spoofing',
+                            'Email Phishing',
+                            'Website phishing',
+                            'Smishing'],
+                           icons=['loud_sound', '🔉', '📧', '🌐', '✉️'],
+                           default_index=0)
+
+class_names = ['Legitimate', 'Phishing']
 
 if selected == 'Audio Phishing':
     st.title('Audio Phishing Detection')
@@ -84,36 +82,30 @@ if selected == 'Audio Phishing':
         tokenized_transcripts = tokens.texts_to_sequences([cleaned_transcript])
         X = pad_sequences(tokenized_transcripts, maxlen=100, padding='post')
         pred = audio_phish_model.predict(X)
-
+        
         max_pred = np.max(pred)
         if max_pred >= 0.5:
-            average_prediction = 0.5
+            average_prediction = np.mean(pred, axis=0)
         else:
             average_prediction = np.mean(pred, axis=0)
         prediction = "The text is predicted to be: " + class_names[np.argmax(average_prediction)]
         st.success(prediction)
-if st.button("Explain Prediction"):
-  def predict_proba(text):
-    with open("vishing_tokenizer.json", "r") as json_file:
-            json_string = json_file.read()
-    tokens = tf.keras.preprocessing.text.tokenizer_from_json(json_string)
-    sequence = tokens.texts_to_sequences(text)
-    sequence = pad_sequences(sequence, maxlen=100, padding='post')
-    prediction = audio_phish_model.predict(sequence)
-    returnable = []
-    for i in prediction:
-        temp = i[0]
-        returnable.append(np.array([1-temp, temp]))
-    return np.array(returnable)
-  explainer= LimeTextExplainer(class_names=class_names)
-  exp = explainer.explain_instance(clean_text_vishing(transcript),predict_proba)
-  st.subheader('LIME Explanation:')
-  exp_dict = exp.as_list()
-  features = [x[0] for x in exp_dict]
-  weights = [x[1] for x in exp_dict]
-# Plot bar chart using Streamlit
-  st.subheader('LIME Explanation:')
-  st.bar_chart({features[i]: weights[i] for i in range(len(features))})
+
+        if st.button("Explain Prediction"):
+            def predict_proba(text):
+                sequence = tokens.texts_to_sequences(text)
+                sequence = pad_sequences(sequence, maxlen=100, padding='post')
+                prediction = audio_phish_model.predict(sequence)
+                return prediction
+            
+            explainer = LimeTextExplainer(class_names=class_names)
+            exp = explainer.explain_instance(clean_text_vishing(transcript), predict_proba)
+            exp_dict = exp.as_list()
+            features = [x[0] for x in exp_dict]
+            weights = [x[1] for x in exp_dict]
+            
+            st.subheader('LIME Explanation:')
+            st.bar_chart({features[i]: weights[i] for i in range(len(features))})
 
 if selected == 'Smishing':
     st.title("Smishing Detection")
@@ -124,43 +116,29 @@ if selected == 'Smishing':
             json_string = json_file.read()
         tokenizer = tf.keras.preprocessing.text.tokenizer_from_json(json_string)
         tokenized_text = tokenizer.texts_to_sequences([cleaned_sms])
-        X = pad_sequences(tokenized_text,maxlen=40,padding='post')
-
+        X = pad_sequences(tokenized_text, maxlen=40, padding='post')
+        
         pred = smishing_model.predict(X)
         max_pred = np.max(pred)
-        if max_pred >= 0.5:
-            average_prediction = np.mean(pred, axis=0)
-	else:
-            average_prediction = np.mean(pred, axis=0)
+        average_prediction = np.mean(pred, axis=0)
         prediction = "The text is predicted to be: " + class_names[np.argmax(average_prediction)]
         st.success(prediction)
-if st.button("Explain Prediction"):
-  def predict_proba(text):
-    with open("tokenizer_smish.json", "r") as json_file:
-            json_string = json_file.read()
-    tokens = tf.keras.preprocessing.text.tokenizer_from_json(json_string)
-    sequence = tokens.texts_to_sequences(text)
-    sequence = pad_sequences(sequence, maxlen=40, padding='post')
-    prediction = smishing_model.predict(sequence)
-    returnable = []
-    for i in prediction:
-        temp = i[0]
-        returnable.append(np.array([1-temp, temp]))
-    return np.array(returnable)
-  explainer= LimeTextExplainer(class_names=class_names)
-  exp = explainer.explain_instance(clean_text_sms(transcript),predict_proba)
-  st.subheader('LIME Explanation:')
-  exp_dict = exp.as_list()
-  features = [x[0] for x in exp_dict]
-  weights = [x[1] for x in exp_dict]
-# Plot bar chart using Streamlit
-  st.subheader('LIME Explanation:')
-  st.bar_chart({features[i]: weights[i] for i in range(len(features))})
-
-
-
-
-
+        
+        if st.button("Explain SMS Prediction"):
+            def predict_proba(text):
+                sequence = tokenizer.texts_to_sequences(text)
+                sequence = pad_sequences(sequence, maxlen=40, padding='post')
+                prediction = smishing_model.predict(sequence)
+                return prediction
+            
+            explainer = LimeTextExplainer(class_names=class_names)
+            exp = explainer.explain_instance(clean_text_sms(sms), predict_proba)
+            exp_dict = exp.as_list()
+            features = [x[0] for x in exp_dict]
+            weights = [x[1] for x in exp_dict]
+            
+            st.subheader('LIME Explanation:')
+            st.bar_chart({features[i]: weights[i] for i in range(len(features))})
 
 if selected == 'Website phishing':
     st.title("Website Phishing Detection")
@@ -171,11 +149,25 @@ if selected == 'Website phishing':
         tokenizer = tf.keras.preprocessing.text.tokenizer_from_json(json_string)
         tokenized_text = tokenizer.texts_to_sequences([url])
         X = pad_sequences(tokenized_text, maxlen=60, padding='post')
-
+        
         pred = website_model.predict(X)
         max_pred = np.max(pred)
-        if max_pred >= 0.5:
-	@@ -158,3 +180,20 @@ def predict_proba(text):
-            average_prediction = np.mean(pred, axis=0)
-        prediction = "The text is predicted to be: " + class_names[np.argmax(average_prediction)]
+        average_prediction = np.mean(pred, axis=0)
+        prediction = "The URL is predicted to be: " + class_names[np.argmax(average_prediction)]
         st.success(prediction)
+        
+        if st.button("Explain URL Prediction"):
+            def predict_proba(text):
+                sequence = tokenizer.texts_to_sequences(text)
+                sequence = pad_sequences(sequence, maxlen=60, padding='post')
+                prediction = website_model.predict(sequence)
+                return prediction
+            
+            explainer = LimeTextExplainer(class_names=class_names)
+            exp = explainer.explain_instance(url, predict_proba)
+            exp_dict = exp.as_list()
+            features = [x[0] for x in exp_dict]
+            weights = [x[1] for x in exp_dict]
+            
+            st.subheader('LIME Explanation:')
+            st.bar_chart({features[i]: weights[i] for i in range(len(features))})
