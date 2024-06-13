@@ -179,15 +179,37 @@ if selected == 'Website phishing':
             average_prediction = np.mean(pred, axis=0)
         prediction = "The text is predicted to be: " + class_names[np.argmax(average_prediction)]
         st.success(prediction)
+    if st.button("Explain Prediction"):
+      def predict_proba(text):
+        with open("url_tokenizer.json", "r") as json_file:
+          json_string = json_file.read()
+        tokens = tf.keras.preprocessing.text.tokenizer_from_json(json_string)
+        sequence = tokens.texts_to_sequences(text)
+        sequence = pad_sequences(sequence, maxlen=60, padding='post')
+        prediction = audio_phish_model.predict(sequence)
+        returnable = []
+        for i in prediction:
+          temp = i[0]
+          returnable.append(np.array([1-temp, temp]))
+        return np.array(returnable)
+      explainer= LimeTextExplainer(class_names=class_names)
+      exp = explainer.explain_instance(url,predict_proba)
+      st.subheader('LIME Explanation:')
+      exp_dict = exp.as_list()
+      features = [x[0] for x in exp_dict]
+      weights = [x[1] for x in exp_dict]
+# Plot bar chart using Streamlit
+      st.bar_chart({features[i]: weights[i] for i in range(len(features))})
+    
   
 if selected == 'Email Phishing':
     st.title("Email Phishing Detection")
-    url = st.text_input("Email content")
+    email = st.text_input("Email content")
     if st.button("Analyze Email"):
         with open("email_tokenizer.json", "r") as json_file:
             json_string = json_file.read()
         tokenizer = tf.keras.preprocessing.text.tokenizer_from_json(json_string)
-        tokenized_text = tokenizer.texts_to_sequences([url])
+        tokenized_text = tokenizer.texts_to_sequences([email])
         X = pad_sequences(tokenized_text, maxlen=1323, padding='post')
         pred = email_model.predict(X)
         max_pred = np.max(pred)
@@ -197,3 +219,26 @@ if selected == 'Email Phishing':
             average_prediction = np.mean(pred, axis=0)
         prediction = "The text is predicted to be: " + class_names[np.argmax(average_prediction)]
         st.success(prediction)
+      
+    if st.button("Explain Prediction"):
+      def predict_proba(text):
+        with open("email_tokenizer.json", "r") as json_file:
+          json_string = json_file.read()
+        tokens = tf.keras.preprocessing.text.tokenizer_from_json(json_string)
+        sequence = tokens.texts_to_sequences(text)
+        sequence = pad_sequences(sequence, maxlen=1323, padding='post')
+        prediction = email_model.predict(sequence)
+        returnable = []
+        for i in prediction:
+          temp = i[0]
+          returnable.append(np.array([1-temp, temp]))
+        return np.array(returnable)
+      explainer= LimeTextExplainer(class_names=class_names)
+      exp = explainer.explain_instance(clean_text_email(email),predict_proba)
+      st.subheader('LIME Explanation:')
+      exp_dict = exp.as_list()
+      features = [x[0] for x in exp_dict]
+      weights = [x[1] for x in exp_dict]
+# Plot bar chart using Streamlit
+      st.bar_chart({features[i]: weights[i] for i in range(len(features))})
+    
