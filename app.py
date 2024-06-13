@@ -91,21 +91,21 @@ if selected == 'Audio Phishing':
         prediction = "The text is predicted to be: " + class_names[np.argmax(average_prediction)]
         st.success(prediction)
 
-        if st.button("Explain Prediction"):
-            def predict_proba(text):
-                sequence = tokens.texts_to_sequences(text)
-                sequence = pad_sequences(sequence, maxlen=100, padding='post')
-                prediction = audio_phish_model.predict(sequence)
-                return prediction
+    if st.button("Explain Prediction"):
+        def predict_proba(text):
+            sequence = tokens.texts_to_sequences(text)
+            sequence = pad_sequences(sequence, maxlen=100, padding='post')
+            prediction = audio_phish_model.predict(sequence)
+            return prediction
             
-            explainer = LimeTextExplainer(class_names=class_names)
-            exp = explainer.explain_instance(clean_text_vishing(transcript), predict_proba)
-            exp_dict = exp.as_list()
-            features = [x[0] for x in exp_dict]
-            weights = [x[1] for x in exp_dict]
+        explainer = LimeTextExplainer(class_names=class_names)
+        exp = explainer.explain_instance(clean_text_vishing(transcript), predict_proba)
+        exp_dict = exp.as_list()
+        features = [x[0] for x in exp_dict]
+        weights = [x[1] for x in exp_dict]
             
-            st.subheader('LIME Explanation:')
-            st.bar_chart({features[i]: weights[i] for i in range(len(features))})
+        st.subheader('LIME Explanation:')
+        st.bar_chart({features[i]: weights[i] for i in range(len(features))})
 
 if selected == 'Smishing':
     st.title("Smishing Detection")
