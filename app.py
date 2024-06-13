@@ -94,7 +94,9 @@ if selected == 'Audio Phishing':
         else:
             average_prediction = np.mean(pred, axis=0)
         prediction = "The text is predicted to be: " + class_names[np.argmax(average_prediction)]
-def predict_proba(text):
+      st.success(prediction)
+if st.button("Explain Prediction"):
+  def predict_proba(text):
     sequence = tokens.texts_to_sequences([text])
     sequence = pad_sequences(sequence, maxlen=100, padding='post')
     prediction = model.predict(sequence)
@@ -103,12 +105,10 @@ def predict_proba(text):
         temp = i[0]
         returnable.append(np.array([1-temp, temp]))
     return np.array(returnable)
-  
-explainer= LimeTextExplainer(class_names=class_names)
-exp = explainer.explain_instance(clean_text_vishing(transcript),predict_proba)
-st.success(prediction)
-st.subheader('LIME Explanation:')
-for feature in exp.as_list():
+  explainer= LimeTextExplainer(class_names=class_names)
+  exp = explainer.explain_instance(clean_text_vishing(transcript),predict_proba)
+  st.subheader('LIME Explanation:')
+  for feature in exp.as_list():
     st.write(feature)
     
         
