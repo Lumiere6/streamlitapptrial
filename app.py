@@ -25,7 +25,7 @@ st.set_page_config(page_title="Phishing detection Framework",layout="wide",page_
 # model
 
 audio_phish_model = pickle.load(open('audiophish.sav', 'rb'))
-smishing_model = tf.keras.models.load_model('smishing_model .h5')
+smishing_model = tf.keras.models.load_model('smishing_finalgood_model.h5')
 #preprocessing functions
 
 def clean_text_vishing(text):
