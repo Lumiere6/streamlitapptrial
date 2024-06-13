@@ -102,7 +102,7 @@ if st.button("Explain Prediction"):
     tokens = tf.keras.preprocessing.text.tokenizer_from_json(json_string)
     sequence = tokens.texts_to_sequences([text])
     sequence = pad_sequences(sequence, maxlen=100, padding='post')
-    prediction = model.predict(sequence)
+    prediction = audio_phish_model.predict(sequence)
     returnable = []
     for i in prediction:
         temp = i[0]
