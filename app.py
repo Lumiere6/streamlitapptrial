@@ -78,8 +78,12 @@ if (selected == 'Audio Phishing'):
     tokenized_transcripts=tokens.texts_to_sequences(cleaned_transcripts)
     X = pad_sequences(tokenized_transcripts,maxlen=100,padding='post')
     pred=audio_phish_model.predict(X)
-    average_prediction = np.mean(pred,axis=0)
-    class_names=['Legitimate',' Phishing']
+    
+    max=np.mean(pred)
+    if max>=0.5:
+      average_prediction=0.5
+    else:
+     average_prediction = np.mean(pred,axis=0)
     prediction= "The text is predicted to be: "+ class_names[np.argmax(average_prediction)]
 #if (selected =='Smishing'):
   
