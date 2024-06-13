@@ -81,7 +81,7 @@ if (selected == 'Audio Phishing'):
     average_prediction = np.mean(pred,axis=0)
     
     class_names=['Legitimate','Phishing']
-    prediction= "The text is predicted to be: "+ class_names[(np.argmax(average_prediction)]
+    prediction= "The text is predicted to be: "+ class_names[np.argmax(average_prediction)]
     st.echo(prediction)
 
   
