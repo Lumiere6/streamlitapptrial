@@ -213,8 +213,8 @@ if selected == 'Email Phishing':
         X = pad_sequences(tokenized_text, maxlen=1323, padding='post')
         pred = email_model.predict(X)
         max_pred = np.max(pred)
-        if max_pred >= 0.3:
-            average_prediction = 0.7
+        if max_pred >= 0.2:
+            average_prediction = 1.7
         else:
             average_prediction = np.mean(pred, axis=0)
         prediction = "The text is predicted to be: " + class_names[np.argmax(average_prediction)]
