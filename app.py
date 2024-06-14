@@ -131,7 +131,7 @@ if selected == 'Smishing':
         
         pred = smishing_model.predict(X)
         max_pred = np.max(pred)
-        if max_pred >= 0.5:
+        if max_pred >= 0.2:
             average_prediction = 0.7
         else:
             average_prediction = np.mean(pred, axis=0)
