@@ -73,7 +73,7 @@ with st.sidebar:
                            'Smishing'],
                           icons=['loud_sound','🔉','','✉️'],
                           default_index=0)
-class_names=['Legitimate',' Phishing']
+class_names=[' Phishing','Legitimate']
 
 if selected == 'Audio Phishing':
     st.title('Audio Phishing Detection')
