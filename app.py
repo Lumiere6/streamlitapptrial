@@ -73,7 +73,7 @@ with st.sidebar:
                            'Smishing'],
                           icons=['loud_sound','🔉','','✉️'],
                           default_index=0)
-class_names=[' Phishing','Legitimate']
+class_names=['Legitimate','Phishing']
 
 if selected == 'Audio Phishing':
     st.title('Audio Phishing Detection')
@@ -213,7 +213,7 @@ if selected == 'Email Phishing':
         X = pad_sequences(tokenized_text, maxlen=1323, padding='post')
         pred = email_model.predict(X)
         max_pred = np.max(pred)
-        if max_pred >= 0.5:
+        if max_pred >= 0.3:
             average_prediction = 0.7
         else:
             average_prediction = np.mean(pred, axis=0)
